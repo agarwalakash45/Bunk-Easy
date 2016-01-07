@@ -48,12 +48,12 @@
             android:textAlignment="center" />
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="74dp"
+            android:layout_height="61dp"
             android:id="@+id/imageButton"
             android:layout_gravity="right"
             android:layout_marginTop="170dp"
-            android:src="@drawable/right_arrow"
+            android:src="@drawable/next_arrow"
             android:clickable="true"
             android:layout_marginRight="10dp"
             android:onClick="nextButtonClicked" />
