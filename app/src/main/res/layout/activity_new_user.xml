@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:fitsSystemWindows="true"
+    tools:context="akashagarwal45.bunkeasy.NewUser">
+
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Welcome"
+            android:id="@+id/welcome_msg"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:textSize="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/welcomeName"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"
+            android:textSize="50dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_user_welcome_msg"
+            android:id="@+id/welcomeText"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="60dp"
+            android:textSize="25dp"
+            android:textAlignment="center" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageButton"
+            android:layout_gravity="right"
+            android:layout_marginTop="170dp"
+            android:src="@drawable/right_arrow"
+            android:clickable="true"
+            android:layout_marginRight="10dp"
+            android:onClick="nextButtonClicked" />
+
+    </LinearLayout>
+</RelativeLayout>

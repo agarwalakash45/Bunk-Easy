@@ -1,0 +1,3 @@
+include ':app', ':caldroidSampleActivity', ':caldroid'
+project(':caldroidSampleActivity').projectDir = new File('Caldroid-master/caldroidSampleActivity')
+project(':caldroid').projectDir = new File('Caldroid-master/caldroid')
