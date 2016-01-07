@@ -68,9 +68,9 @@ public class AddSubjects extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.action_settings:
  //               Log.d("Akash","Settings button pressed");
-                Intent intent=new Intent(AddSubjects.this,SubjectSettings.class);
+                Intent intent1=new Intent(AddSubjects.this,SubjectSettings.class);
    //             Log.d("Akash","Settings button pressed");
-                startActivity(intent);
+                startActivity(intent1);
                 //Log.d("Akash", "Settings button pressed");
                 break;
             case R.id.about:
@@ -213,6 +213,14 @@ public class AddSubjects extends AppCompatActivity {
         switch(item.getItemId()){
             case R.id.delete_subject:
                 deleteSubject(subjectName);
+                break;
+
+            case R.id.schedule:
+                //Creating intent and passing subject name to next activity
+                Intent intent=new Intent(AddSubjects.this,Schedule.class);
+                intent.putExtra("subName",subjectName);
+                startActivity(intent);
+
                 break;
 
             case R.id.edit_subject:

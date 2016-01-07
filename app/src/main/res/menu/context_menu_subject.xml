@@ -6,6 +6,9 @@
         android:title="Edit"
         />
     <item
+        android:id="@+id/schedule"
+        android:title="Add to schedule"/>
+    <item
         android:id="@+id/delete_subject"
         android:title="Delete"
         />

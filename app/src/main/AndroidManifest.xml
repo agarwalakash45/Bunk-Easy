@@ -43,12 +43,15 @@
         <activity
             android:name=".SubjectDetails"
             android:label="@string/title_activity_subject_details"
-            android:theme="@style/AppTheme"/>
-
-        <activity android:name=".SubjectSettings"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".SubjectSettings"
             android:label="Settings"
-            android:theme="@style/AppTheme"/>
-
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Schedule"
+            android:label="@string/title_activity_schedule"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
