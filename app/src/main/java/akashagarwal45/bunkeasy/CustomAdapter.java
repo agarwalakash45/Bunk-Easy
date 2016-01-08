@@ -35,8 +35,9 @@ public class CustomAdapter extends CursorAdapter{
         int total=cursor.getInt(cursor.getColumnIndex("total"));
         int present=total-miss;
 
-        float percent=(float)present/(total!=0?total:1);
+        int percent=(present*100)/(total!=0?total:1);
 
+        
         subjectNameTextView.setText(name);
         percentTextView.setText(String.valueOf(percent)+"%");
         presentTextView.setText("Present: "+String.valueOf(present));

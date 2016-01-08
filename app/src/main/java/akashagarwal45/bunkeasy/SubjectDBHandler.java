@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SubjectDBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION=5;
+    private static final int DATABASE_VERSION=6;
     private static final String DATABASE_NAME="subject.db";
     public static final String TABLE_SUBJECTS="subjects";
     public static final String COLUMN_SUBNAME="subname";
@@ -38,8 +38,9 @@ public class SubjectDBHandler extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-    public void addSubject(Subjects subject){
 
+    //Method to add new subject to database
+    public void addSubject(Subjects subject){
         ContentValues values=new ContentValues();
         values.put(COLUMN_SUBNAME,subject.getSubName());
         values.put(COLUMN_MISS,subject.getMissClass());
@@ -53,9 +54,10 @@ public class SubjectDBHandler extends SQLiteOpenHelper{
     public Cursor todoCursor(){
         SQLiteDatabase db=getWritableDatabase();
 
-        String query="SELECT rowid _id,* FROM "+TABLE_SUBJECTS+";";
+        String query="SELECT rowid _id,* FROM "+TABLE_SUBJECTS + " ORDER BY " + COLUMN_SUBNAME + ";";
         /*
             for CursorAdapter to work, cursor should contain _id column. In SQL there is always a row id associated with every row.
+            so aliasing it as _id
          */
 
         return db.rawQuery(query, null);
@@ -86,6 +88,25 @@ public class SubjectDBHandler extends SQLiteOpenHelper{
 
         db.execSQL(query);
 
+        db.close();
+    }
+
+    //Method to update attendance when user marks present or absent
+    public void markAttendance(String subject,int mark){
+        SQLiteDatabase db=getWritableDatabase();
+        if(mark==1){         //Present is marked
+
+            String query="UPDATE " + TABLE_SUBJECTS + " SET " + COLUMN_TOTAL + "=" + COLUMN_TOTAL + "+1 " +
+                    " WHERE " + COLUMN_SUBNAME + "=\"" + subject + "\";";
+            db.execSQL(query);
+        }
+        else{               //Absent is marked
+
+            String query="UPDATE " + TABLE_SUBJECTS + " SET " + COLUMN_TOTAL + "=" + COLUMN_TOTAL + "+1, " +
+                    COLUMN_MISS + "=" + COLUMN_MISS + "+1 "+
+                    " WHERE " + COLUMN_SUBNAME + "=\"" + subject + "\";";
+            db.execSQL(query);
+        }
         db.close();
     }
 }

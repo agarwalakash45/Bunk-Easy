@@ -25,13 +25,19 @@ public class AddSubjects extends AppCompatActivity {
 
     ListView subListView;
     SubjectDBHandler db=new SubjectDBHandler(this,null,null,1);
-
+    ScheduleDBHandler sch_db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        //Checking for Errors
+        //Log.d("Test","onCreate() called");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_subjects);
 
         subListView=(ListView)findViewById(R.id.subjectListView);
+
+        sch_db=new ScheduleDBHandler(AddSubjects.this,null,null,1);
 
         Cursor c=db.todoCursor();       //return cursor to all the records in the subject table
 
@@ -66,6 +72,13 @@ public class AddSubjects extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
+            //Starting activity Mark Attendance
+            case R.id.mark_attendance:
+
+                Intent intent3=new Intent(AddSubjects.this,MarkAttendance.class);
+                startActivity(intent3);
+                break;
+
             case R.id.action_settings:
  //               Log.d("Akash","Settings button pressed");
                 Intent intent1=new Intent(AddSubjects.this,SubjectSettings.class);
@@ -73,6 +86,14 @@ public class AddSubjects extends AppCompatActivity {
                 startActivity(intent1);
                 //Log.d("Akash", "Settings button pressed");
                 break;
+
+            case R.id.view_schedule:
+
+                //Intent to start activity View Schedule
+                Intent intent2=new Intent(AddSubjects.this,ViewSchedule.class);
+                startActivity(intent2);
+                break;
+
             case R.id.about:
 
                 break;
@@ -99,8 +120,10 @@ public class AddSubjects extends AppCompatActivity {
                     Subjects newSubject = new Subjects(input.getText().toString());
                     final SubjectDBHandler db;
                     db = new SubjectDBHandler(AddSubjects.this, null, null, 1);
-                    db.addSubject(newSubject);
 
+                    db.addSubject(newSubject);
+                    Toast toast = Toast.makeText(getApplicationContext(), "Subject added!!", Toast.LENGTH_SHORT);
+                    toast.show();
                     Intent intent = getIntent();
                     intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
                     finish();
@@ -138,9 +161,13 @@ public class AddSubjects extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if(newSubjectName.getText().toString().isEmpty())
                     Toast.makeText(getApplicationContext(),"Subject name can't be empty!!",Toast.LENGTH_SHORT).show();
-                else
+                else {
+                    //Updating subject name in subject database
                     db.editSubjectName(newSubjectName.getText().toString(), oldSubjectName);
 
+                    //Updating subject name in schedule database
+                    sch_db.updateSubjectName(oldSubjectName,newSubjectName.getText().toString());
+                }
                 //Restarting the subjects display activity
                 Intent intent = getIntent();
                 finish();
@@ -173,8 +200,9 @@ public class AddSubjects extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 db.deleteSubject(subjectName);
 
+                sch_db.deleteSubjectFromSchedule(subjectName);
                 //Toast to display deletion message
-                Toast.makeText(getApplicationContext(),"Subject deleted!!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Subject deleted!!", Toast.LENGTH_SHORT).show();
 
                 //Restarting the subjects display activity
                 Intent intent = getIntent();
@@ -230,4 +258,13 @@ public class AddSubjects extends AppCompatActivity {
         return super.onContextItemSelected(item);
     }
 
+    @Override
+    protected void onRestart() {
+
+        Intent intent=getIntent();
+        finish();
+        startActivity(intent);
+
+        super.onRestart();
+    }
 }

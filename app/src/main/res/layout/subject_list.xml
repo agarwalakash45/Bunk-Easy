@@ -13,7 +13,7 @@
         android:layout_marginRight="10dp">
 
         <TextView
-            android:layout_width="300dp"
+            android:layout_width="280dp"
             android:layout_height="50dp"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
@@ -23,7 +23,7 @@
             android:id="@+id/subjectNameTextView" />
 
         <TextView
-            android:layout_width="80dp"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Medium"
