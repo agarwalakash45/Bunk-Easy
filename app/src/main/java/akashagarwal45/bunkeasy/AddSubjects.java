@@ -26,6 +26,7 @@ public class AddSubjects extends AppCompatActivity {
     ListView subListView;
     SubjectDBHandler db=new SubjectDBHandler(this,null,null,1);
     ScheduleDBHandler sch_db;
+    AttendanceDBHandler att_db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -38,6 +39,8 @@ public class AddSubjects extends AppCompatActivity {
         subListView=(ListView)findViewById(R.id.subjectListView);
 
         sch_db=new ScheduleDBHandler(AddSubjects.this,null,null,1);
+
+        att_db=new AttendanceDBHandler(AddSubjects.this,null,null,1);
 
         Cursor c=db.todoCursor();       //return cursor to all the records in the subject table
 
@@ -164,7 +167,8 @@ public class AddSubjects extends AppCompatActivity {
                 else {
                     //Updating subject name in subject database
                     db.editSubjectName(newSubjectName.getText().toString(), oldSubjectName);
-
+                    //update subject name in attendance database
+                    att_db.updateSubjectName(oldSubjectName,newSubjectName.getText().toString());
                     //Updating subject name in schedule database
                     sch_db.updateSubjectName(oldSubjectName,newSubjectName.getText().toString());
                 }
@@ -199,6 +203,8 @@ public class AddSubjects extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 db.deleteSubject(subjectName);
+
+                att_db.deleteSubject(subjectName);
 
                 sch_db.deleteSubjectFromSchedule(subjectName);
                 //Toast to display deletion message

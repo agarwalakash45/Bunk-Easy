@@ -100,28 +100,16 @@ public class ScheduleDBHandler extends SQLiteOpenHelper{
         db.close();
     }
 
-    //Method that returns List of subjects when day of week is given
-    public ArrayList<String> subjectsListGivenDay(String day){
+    //Method that returns cursor to List of subjects when day of week is given
+    public Cursor subjectsListGivenDayCursor(String day){
         SQLiteDatabase db=getReadableDatabase();
 
-        ArrayList<String> subjects=new ArrayList<String>();
-
-        String query="SELECT rowid AS _id,* FROM " + TABLE_SCHEDULE +";";
+        String query="SELECT rowid AS _id,* FROM " + TABLE_SCHEDULE +
+                " WHERE " + COLUMN_DAY + "=\"" + day + "\";";
 
         Cursor cursor=db.rawQuery(query,null);
+        //db.close();
 
-        if(cursor!=null) {
-            cursor.moveToFirst();
-            do {
-                String subName = cursor.getString(cursor.getColumnIndex(COLUMN_SUBJECTNAME));
-                if(cursor.getString(cursor.getColumnIndex(COLUMN_DAY)).equals(day))
-                    subjects.add(subName);
-            } while(cursor.moveToNext());
-
-            cursor.close();
-        }
-        db.close();
-
-        return subjects;
+        return cursor;
     }
 }

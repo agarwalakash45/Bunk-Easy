@@ -94,19 +94,48 @@ public class SubjectDBHandler extends SQLiteOpenHelper{
     //Method to update attendance when user marks present or absent
     public void markAttendance(String subject,int mark){
         SQLiteDatabase db=getWritableDatabase();
-        if(mark==1){         //Present is marked
+        if(mark==1){         //Attendance marked from holiday to present
 
             String query="UPDATE " + TABLE_SUBJECTS + " SET " + COLUMN_TOTAL + "=" + COLUMN_TOTAL + "+1 " +
                     " WHERE " + COLUMN_SUBNAME + "=\"" + subject + "\";";
             db.execSQL(query);
         }
-        else{               //Absent is marked
+        else if(mark==2){               //Attendance marked from holiday to absent
 
             String query="UPDATE " + TABLE_SUBJECTS + " SET " + COLUMN_TOTAL + "=" + COLUMN_TOTAL + "+1, " +
                     COLUMN_MISS + "=" + COLUMN_MISS + "+1 "+
                     " WHERE " + COLUMN_SUBNAME + "=\"" + subject + "\";";
             db.execSQL(query);
         }
+        else if(mark==3){               //Attendance marked from present to absent
+
+            String query="UPDATE " + TABLE_SUBJECTS + " SET " +
+                    COLUMN_MISS + "=" + COLUMN_MISS + "+1 "+
+                    " WHERE " + COLUMN_SUBNAME + "=\"" + subject + "\";";
+            db.execSQL(query);
+        }
+        else if(mark==4){                           //Attendance marked from absent to present
+
+            String query="UPDATE " + TABLE_SUBJECTS + " SET " +
+                    COLUMN_MISS + "=" + COLUMN_MISS + "-1 "+
+                    " WHERE " + COLUMN_SUBNAME + "=\"" + subject + "\";";
+            db.execSQL(query);
+        }
+        else if(mark==5){                                       //Attendance marked from absent to holiday
+            String query="UPDATE " + TABLE_SUBJECTS + " SET " + COLUMN_TOTAL + "=" + COLUMN_TOTAL + "-1, " +
+                    COLUMN_MISS + "=" + COLUMN_MISS + "-1 "+
+                    " WHERE " + COLUMN_SUBNAME + "=\"" + subject + "\";";
+
+            db.execSQL(query);
+        }
+        else{                                           //Attendance marked from present to holiday
+            String query="UPDATE " + TABLE_SUBJECTS + " SET " + COLUMN_TOTAL + "=" + COLUMN_TOTAL + "-1 " +
+                    " WHERE " + COLUMN_SUBNAME + "=\"" + subject + "\";";
+
+            db.execSQL(query);
+        }
+
+
         db.close();
     }
 }
