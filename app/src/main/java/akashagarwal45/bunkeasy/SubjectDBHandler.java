@@ -138,4 +138,14 @@ public class SubjectDBHandler extends SQLiteOpenHelper{
 
         db.close();
     }
+
+    //Method to remove all the entries in table, the table schema will not be affected
+    public void deleteAllFromTable(){
+        SQLiteDatabase db=getWritableDatabase();
+
+        String query="DELETE FROM " + TABLE_SUBJECTS + ";";
+
+        db.execSQL(query);
+
+    }
 }

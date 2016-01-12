@@ -12,14 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/FrameLayout">
 
-        <CalendarView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/calendar"
-            android:layout_gravity="left|top"
-            android:onClick="onDateClicked"
-            android:clickable="true" />
     </FrameLayout>
 </RelativeLayout>

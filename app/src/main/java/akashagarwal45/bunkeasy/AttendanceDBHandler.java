@@ -74,7 +74,7 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
                 COLUMN_SUBNAME + "=\"" + subName + "\" AND " +
                 COLUMN_DATE + "=" + date + ";";
 
-        Cursor c=db.rawQuery(query,null);
+        Cursor c=db.rawQuery(query, null);
 
 //        db.close();
 
@@ -133,4 +133,23 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
         db.close();
     }
 
+    //To return cursor to provide dates to show attendance when a subject is opened
+    public Cursor showAttendanceonDate(String subName){
+        SQLiteDatabase db=getReadableDatabase();
+
+        String query="SELECT * FROM " + TABLE_ATTENDANCE + " WHERE " +
+                COLUMN_SUBNAME + "=\"" + subName + "\";";
+
+        return db.rawQuery(query,null);
+    }
+
+    //Method to remove all the entries in table, the table schema will not be affected
+    public void deleteAllFromTable(){
+        SQLiteDatabase db=getWritableDatabase();
+
+        String query="DELETE FROM " + TABLE_ATTENDANCE + ";";
+
+        db.execSQL(query);
+
+    }
 }

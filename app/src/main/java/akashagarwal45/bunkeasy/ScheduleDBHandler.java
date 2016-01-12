@@ -112,4 +112,14 @@ public class ScheduleDBHandler extends SQLiteOpenHelper{
 
         return cursor;
     }
+
+    //Method to remove all the entries in table, the table schema will not be affected
+    public void deleteAllFromTable(){
+        SQLiteDatabase db=getWritableDatabase();
+
+        String query="DELETE FROM " + TABLE_SCHEDULE + ";";
+
+        db.execSQL(query);
+
+    }
 }

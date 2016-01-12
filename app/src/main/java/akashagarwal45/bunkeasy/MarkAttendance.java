@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -42,6 +43,7 @@ public class MarkAttendance extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mark_attendance);
+
         markAttendanceListView=(ListView)findViewById(R.id.markAttendanceListView);
 
         db=new ScheduleDBHandler(this,null,null,1);

@@ -55,6 +55,11 @@ public class AddSubjects extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(AddSubjects.this, SubjectDetails.class);
                         //Log.d("Akash","Starting intent");
+
+                        String subName=((TextView)view.findViewById(R.id.subjectNameTextView)).getText().toString();
+
+                        //Sending subject name through extras
+                        intent.putExtra("SUBJECTNAME",subName);
                         startActivity(intent);
                     }
                 }
@@ -100,9 +105,53 @@ public class AddSubjects extends AppCompatActivity {
             case R.id.about:
 
                 break;
+            case R.id.reset:
+                //CAlling method to reset all data
+               resetData();
+
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //Method to reset data
+    public void resetData(){
+        //Creating Alert Dialog to ask for confirmation
+        AlertDialog.Builder alert=new AlertDialog.Builder(this);
+        alert.setMessage("All data will be erased");
+        alert.setTitle("\nAre you sure?");
+        alert.setPositiveButton("YES",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Calling method to remove data from all the tables
+                        db.deleteAllFromTable();;
+                        sch_db.deleteAllFromTable();
+                        att_db.deleteAllFromTable();
+
+                        Toast.makeText(getApplicationContext(),"Reset Successful",Toast.LENGTH_SHORT).show();
+
+                        //Starting activity to referesh
+                        Intent intent=getIntent();
+                        finish();
+                        startActivity(intent);
+
+                    }
+                }
+        );
+
+        alert.setNegativeButton("NO",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }
+        );
+
+        alert.show();
+    }
+
 
     public void addSubjectButtonClicked(View view){
         AlertDialog.Builder alert=new AlertDialog.Builder(this);

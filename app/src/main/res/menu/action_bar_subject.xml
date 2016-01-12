@@ -2,7 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/mark_attendance"
-        android:title="Mark Attendance"/>
+        android:title="Mark Attendance"
+        />
         />
     <item
         android:id="@+id/view_schedule"
@@ -15,5 +16,8 @@
         android:id="@+id/about"
         android:title="About"
         />
-
+    <item
+        android:id="@+id/reset"
+        android:title="Reset"
+    />
 </menu>

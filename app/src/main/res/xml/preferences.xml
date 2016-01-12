@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <EditTextPreference
-        android:key="deadline"
-        android:title="Attendance"
-        android:dialogTitle="Enter shortage percentage"
-        />
+    <PreferenceCategory
+        android:title="Profile">
+        <EditTextPreference
+            android:title="Name"
+            android:dialogTitle="Enter your name"/>
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="Notifications">
+        <CheckBoxPreference
+            android:title="Daily Notifications"
+            android:summary="You will be notified to mark attendance"
+            />
+        <EditTextPreference
+            android:title="Choose Time"
+            />
+    </PreferenceCategory>
 </PreferenceScreen>
