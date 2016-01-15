@@ -4,7 +4,7 @@
 
     <GridLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -19,7 +19,7 @@
             android:text="Large Text"
             android:layout_row="0"
             android:layout_column="0"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:id="@+id/subjectNameTextView" />
 
         <TextView
@@ -30,7 +30,8 @@
             android:id="@+id/percentTextView"
             android:layout_row="0"
             android:layout_column="1"
-            android:textSize="15dp" />
+            android:textSize="15dp"
+            android:textColor="#908989" />
 
     </GridLayout>
 
@@ -52,7 +53,7 @@
             android:id="@+id/presentTextView"
             android:layout_row="0"
             android:layout_column="0"
-            android:textColor="#0cf40c" />
+            android:textColor="#0ba30b" />
 
         <TextView
             android:layout_width="110dp"
@@ -62,7 +63,7 @@
             android:id="@+id/absentTextView"
             android:layout_row="0"
             android:layout_column="1"
-            android:textColor="#ee1212" />
+            android:textColor="#b60e0e" />
 
         <TextView
             android:layout_width="110dp"
@@ -72,7 +73,7 @@
             android:id="@+id/totalTextView"
             android:layout_row="0"
             android:layout_column="2"
-            android:textColor="#2455e6" />
+            android:textColor="#1139b0" />
 
     </GridLayout>
 

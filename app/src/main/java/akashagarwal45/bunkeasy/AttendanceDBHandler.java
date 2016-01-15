@@ -8,14 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class AttendanceDBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION=2;
+    private static final int DATABASE_VERSION=3;
     private static final String DATABASE_NAME="attendance.db";
     public static final String TABLE_ATTENDANCE="attendance";
     public static final String COLUMN_SUBNAME="subjectname";
     public static final String COLUMN_DATE="date";
-    //public static final String COLUMN_HOUR="hour";
-    //public static final String COLUMN_MINUTE="minute";
-    public static final String COLUMN_RESPONSE="response";      //0->absent  1->preent   2->holiday/cancelled
+    public static final String COLUMN_HOUR="hour";
+    public static final String COLUMN_MINUTE="minute";
+    public static final String COLUMN_RESPONSE="response";      //0->absent  1->present   2->holiday/cancelled
 
     public AttendanceDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -26,8 +26,8 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
         String query="CREATE TABLE IF NOT EXISTS " + TABLE_ATTENDANCE + "(" +
                 COLUMN_SUBNAME + " TEXT NOT NULL, " +
                 COLUMN_DATE + " DATE, " +
-     //           COLUMN_HOUR + " INT, " +
-       //         COLUMN_MINUTE + " INT, " +
+                COLUMN_HOUR + " TEXT, " +
+                COLUMN_MINUTE + " TEXT, " +
                 COLUMN_RESPONSE + " INT);";
 
         db.execSQL(query);
@@ -40,13 +40,15 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
     }
 
     //Method to save subject attendance record date wise
-    public void saveAttendanceRecord(String subName,String date,int response){
+    public void saveAttendanceRecord(String subName,String date,int response,String hour,String minute){
         SQLiteDatabase db=getWritableDatabase();
 
-        if(isAttendanceMarked(subName,date)){       //Entry already in table so just update it
+        if(isAttendanceMarked(subName,date,hour,minute)){       //Entry already in table so just update it
                  String query="UPDATE " + TABLE_ATTENDANCE + " SET " +
                          COLUMN_RESPONSE + "=" + response + " WHERE " +
                          COLUMN_SUBNAME + "=\"" + subName + "\" AND " +
+                         COLUMN_HOUR + "=" + hour + " AND " +
+                         COLUMN_MINUTE + "=" + minute + " AND " +
                          COLUMN_DATE + "=" + date + ";";
 
             db.execSQL(query);
@@ -58,7 +60,8 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
             values.put(COLUMN_SUBNAME,subName);
             values.put(COLUMN_DATE,date);
             values.put(COLUMN_RESPONSE,response);
-
+            values.put(COLUMN_HOUR,hour);
+            values.put(COLUMN_MINUTE,minute);
             db.insert(TABLE_ATTENDANCE, null, values);
 
         }
@@ -66,12 +69,14 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
         db.close();
     }
 
-    //Method to check whether attendance for given subject name and date is marked(inserted) o not
-    public boolean isAttendanceMarked(String subName,String date){
+    //Method to check whether attendance for given subject name and date is marked(inserted) or not
+    public boolean isAttendanceMarked(String subName,String date,String hour,String minute){
         SQLiteDatabase db=getWritableDatabase();
 
         String query="SELECT * FROM " + TABLE_ATTENDANCE + " WHERE " +
                 COLUMN_SUBNAME + "=\"" + subName + "\" AND " +
+                COLUMN_HOUR + "=" + hour + " AND " +
+                COLUMN_MINUTE + "=" + minute + " AND " +
                 COLUMN_DATE + "=" + date + ";";
 
         Cursor c=db.rawQuery(query, null);
@@ -85,13 +90,15 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
     }
 
     //Method to return response for given subject and date
-    public int getResponse(String subName,String date){
+    public int getResponse(String subName,String date,String hour,String minute){
         SQLiteDatabase db=getReadableDatabase();
 
         int response;
 
         String query="SELECT * FROM " + TABLE_ATTENDANCE + " WHERE " +
                 COLUMN_DATE + "=" + date + " AND " +
+                COLUMN_HOUR + "=" + hour + " AND " +
+                COLUMN_MINUTE + "=" + minute + " AND " +
                 COLUMN_SUBNAME + "=\"" + subName + "\";";
 
         Cursor c = db.rawQuery(query, null);
@@ -133,6 +140,16 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
         db.close();
     }
 
+    //Method that returns cursor to query that returns all classes on a particular date
+    public Cursor classesOnGivenDate(String date){
+        SQLiteDatabase db=getReadableDatabase();
+
+        String query="SELECT * FROM " + TABLE_ATTENDANCE + " WHERE " +
+                COLUMN_DATE + "=" + date +";";
+
+        return db.rawQuery(query,null);
+    }
+
     //To return cursor to provide dates to show attendance when a subject is opened
     public Cursor showAttendanceonDate(String subName){
         SQLiteDatabase db=getReadableDatabase();
@@ -150,6 +167,44 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
         String query="DELETE FROM " + TABLE_ATTENDANCE + ";";
 
         db.execSQL(query);
+
+    }
+
+    //Method to deal with multiple classes of same subject on a date and color the calendar accordingly
+    //Returns 0 is all absent, 1 if any absent and 2 if all present
+    public int forMultipleClasses(String subname,String date)
+    {
+        SQLiteDatabase db=getReadableDatabase();
+
+        String query="SELECT * FROM " + TABLE_ATTENDANCE + " WHERE " +
+                COLUMN_SUBNAME + "=\"" + subname + "\" AND " +
+                COLUMN_DATE + "=" + date + ";";
+
+        Cursor c=db.rawQuery(query,null);
+
+        int absent=0,total,present=0;
+
+        c.moveToFirst();
+
+        while(!c.isAfterLast())
+        {
+            if(c.getInt(c.getColumnIndex(COLUMN_RESPONSE))==0)          //absent
+                absent++;
+            if(c.getInt(c.getColumnIndex(COLUMN_RESPONSE))==1)
+                present++;
+            c.moveToNext();
+        }
+
+        total=c.getCount();
+        c.close();
+        db.close();
+        if(absent==0&&present!=0)               //all present
+            return 2;
+        else if(absent==total&&total!=0)      //all absent
+                return 0;
+        else if(absent>0)
+            return 1;           //some absent and some present
+        return -1;
 
     }
 }

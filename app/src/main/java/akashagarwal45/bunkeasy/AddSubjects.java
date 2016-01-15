@@ -1,16 +1,23 @@
 package akashagarwal45.bunkeasy;
 
+import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,6 +27,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.github.paolorotolo.appintro.AppIntro;
+
+import java.util.Calendar;
 
 public class AddSubjects extends AppCompatActivity {
 
@@ -27,6 +37,7 @@ public class AddSubjects extends AppCompatActivity {
     SubjectDBHandler db=new SubjectDBHandler(this,null,null,1);
     ScheduleDBHandler sch_db;
     AttendanceDBHandler att_db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -35,6 +46,14 @@ public class AddSubjects extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_subjects);
+
+        Toolbar toolbar=(Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        //Setting shotage percent from settings
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(this);
+        Subjects.shortPercent=Integer.parseInt(pref.getString("shortage_percent","75"));
+
 
         subListView=(ListView)findViewById(R.id.subjectListView);
 
@@ -68,13 +87,12 @@ public class AddSubjects extends AppCompatActivity {
         //registering ListView for floating context menu
         registerForContextMenu(subListView);
     }
-
     //To set acion bar to the activity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.action_bar_subject,menu);
-        return super.onCreateOptionsMenu(menu);
+        inflater.inflate(R.menu.action_bar_action,menu);
+        return true;
     }
 
     @Override
@@ -103,8 +121,17 @@ public class AddSubjects extends AppCompatActivity {
                 break;
 
             case R.id.about:
+                //Method that displays dialog to display about information
+                aboutDialogDisplay();
 
                 break;
+
+            case R.id.help:
+                Intent intent=new Intent(AddSubjects.this,AppIntroduction.class);
+                startActivity(intent);
+
+                break;
+
             case R.id.reset:
                 //CAlling method to reset all data
                resetData();
@@ -113,6 +140,28 @@ public class AddSubjects extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //Method that displays dialog to display about information
+    public void  aboutDialogDisplay(){
+        AlertDialog.Builder alert=new AlertDialog.Builder(this);
+
+        alert.setTitle("About");
+
+        LayoutInflater inflater=LayoutInflater.from(this);
+        View layout=inflater.inflate(R.layout.about_dialog,null);
+
+        alert.setView(layout);
+
+        alert.setPositiveButton("CLOSE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        alert.show();
+    }
+
 
     //Method to reset data
     public void resetData(){
@@ -217,9 +266,9 @@ public class AddSubjects extends AppCompatActivity {
                     //Updating subject name in subject database
                     db.editSubjectName(newSubjectName.getText().toString(), oldSubjectName);
                     //update subject name in attendance database
-                    att_db.updateSubjectName(oldSubjectName,newSubjectName.getText().toString());
+                    att_db.updateSubjectName(oldSubjectName, newSubjectName.getText().toString());
                     //Updating subject name in schedule database
-                    sch_db.updateSubjectName(oldSubjectName,newSubjectName.getText().toString());
+                    sch_db.updateSubjectName(oldSubjectName, newSubjectName.getText().toString());
                 }
                 //Restarting the subjects display activity
                 Intent intent = getIntent();
@@ -283,7 +332,7 @@ public class AddSubjects extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater=getMenuInflater();
-        inflater.inflate(R.menu.context_menu_subject,menu);         //inflating menu layout as floating context menu
+        inflater.inflate(R.menu.context_menu_subject, menu);         //inflating menu layout as floating context menu
     }
 
     //method to decide action to be taken when a context item is selected
@@ -322,4 +371,5 @@ public class AddSubjects extends AppCompatActivity {
 
         super.onRestart();
     }
+
 }

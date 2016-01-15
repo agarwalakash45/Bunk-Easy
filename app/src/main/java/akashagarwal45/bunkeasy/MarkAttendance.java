@@ -136,20 +136,22 @@ public class MarkAttendance extends FragmentActivity {
 
                         //Retreiving subject name from textview
                         final String subjectname=((TextView)view.findViewById(R.id.attendanceSubjectNameTextView)).getText().toString();
+                        final String hour=((TextView) view.findViewById(R.id.attendanceHourTextView)).getText().toString();
+                        final String minute= ((TextView)view.findViewById(R.id.attendanceMinTextView)).getText().toString();
 
                         //Getting default option as attendance marked
                         int def=2;
 
-                        if(att_db.getResponse(subjectname,clickedDate)!=-1)
-                                def=att_db.getResponse(subjectname, clickedDate);
+                        if(att_db.getResponse(subjectname,clickedDate,hour,minute)!=-1)
+                                def=att_db.getResponse(subjectname, clickedDate,hour,minute);
 
                         //To create alert dialog with radio buttons to mark attendance
                         final int finalDef = def;
                         alert.setSingleChoiceItems(options, def,
-                                new DialogInterface.OnClickListener() {
+                                 new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        att_db.saveAttendanceRecord(subjectname,clickedDate,which);
+                                        att_db.saveAttendanceRecord(subjectname,clickedDate,which,hour,minute);
 
                                         switch (which) {
                                             case 0:         //Mark absent
@@ -180,7 +182,7 @@ public class MarkAttendance extends FragmentActivity {
 
                                                 if(finalDef==0)         //Attendance marked from absent to holiday
                                                     sub_db.markAttendance(subjectname,5);
-                                                else                    //Attendance marked from present to holiday
+                                                else if(finalDef==1)                   //Attendance marked from present to holiday
                                                     sub_db.markAttendance(subjectname,6);
 
                                                 Toast.makeText(getApplicationContext(),"Saved",Toast.LENGTH_SHORT).show();

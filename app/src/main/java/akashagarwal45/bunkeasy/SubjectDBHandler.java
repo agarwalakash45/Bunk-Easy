@@ -148,4 +148,15 @@ public class SubjectDBHandler extends SQLiteOpenHelper{
         db.execSQL(query);
 
     }
+
+    //Method to return cursor to query returning information of a particular subject
+    public Cursor subjectDetailsByName(String subName){
+        SQLiteDatabase db=getReadableDatabase();
+
+        String query="SELECT * FROM " + TABLE_SUBJECTS + " WHERE " +
+                COLUMN_SUBNAME + "=\"" + subName + "\";";
+
+        return db.rawQuery(query,null);
+    }
+
 }

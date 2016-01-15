@@ -16,4 +16,15 @@
         android:id="@+id/FrameLayout">
 
     </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/attendanceStatusDescription"
+        android:layout_below="@+id/FrameLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textSize="25dp"
+        android:textAlignment="center" />
 </RelativeLayout>

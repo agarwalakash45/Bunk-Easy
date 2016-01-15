@@ -12,7 +12,7 @@
         android:layout_margin="5dp">
 
         <TextView
-            android:layout_width="275dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Large Text"
@@ -21,13 +21,33 @@
             android:layout_column="0" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="30dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Small Text"
-            android:id="@+id/attendanceTimeTextView"
+            android:id="@+id/attendanceHourTextView"
             android:layout_row="0"
             android:layout_column="1"
             android:textColor="#f21515" />
+
+        <TextView
+            android:layout_width="5dp"
+            android:layout_height="30dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text=":"
+            android:id="@+id/textView"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:textColor="#e22626" />
+
+        <TextView
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/attendanceMinTextView"
+            android:layout_row="0"
+            android:layout_column="3"
+            android:textColor="#db1f1f" />
     </GridLayout>
 </RelativeLayout>

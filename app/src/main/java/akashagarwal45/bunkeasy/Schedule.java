@@ -25,8 +25,7 @@ import java.util.List;
 
 public class Schedule extends FragmentActivity {
 
-
-    final String [] days={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
+    final String [] days={"Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"};
     final static int DIALOG_ID=0;
     int hour,minute_x;
     ScheduleDBHandler db;
@@ -37,6 +36,8 @@ public class Schedule extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
+
+
 
         //Create a database object to store subject schedule in database
         db=new ScheduleDBHandler(this,null,null,1);

@@ -11,10 +11,22 @@
         android:title="Notifications">
         <CheckBoxPreference
             android:title="Daily Notifications"
+            android:key="daily_notification_enable"
             android:summary="You will be notified to mark attendance"
             />
-        <EditTextPreference
-            android:title="Choose Time"
+
+        <akashagarwal45.bunkeasy.TimePickerPreference
+            android:title="Set time"
+            android:key="time_notification"
+            android:inputType="time"
+            android:dependency="daily_notification_enable"
             />
     </PreferenceCategory>
+    <PreferenceCategory
+        android:title="General">
+        <EditTextPreference
+            android:title="Attendance percentage"
+            android:key="shortage_percent"
+            android:inputType="number"/>
+</PreferenceCategory>
 </PreferenceScreen>

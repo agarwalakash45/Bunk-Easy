@@ -86,4 +86,6 @@
     <string name="action_settings">action_settings</string>
     <string name="title_activity_subject_settings">Settings</string>
     <string name="title_activity_schedule">Schedule</string>
+    <string name="mark_attendance">Mark Attendance</string>
+    <string name="click_day">Click on a day to set time</string>
 </resources>

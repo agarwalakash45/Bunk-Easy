@@ -4,7 +4,7 @@ public class Subjects {
     private String subName;
     private int missClass;
     private int totClass;
-    //static int shortPercent;
+    static int shortPercent;
 
     public Subjects(){
         this.missClass=0;

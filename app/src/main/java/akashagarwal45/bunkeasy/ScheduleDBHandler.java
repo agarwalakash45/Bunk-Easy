@@ -64,7 +64,7 @@ public class ScheduleDBHandler extends SQLiteOpenHelper{
         //Log.d("Akash","In todoCursor()");
 
         String query="SELECT rowid _id,* FROM "+TABLE_SCHEDULE + " ORDER BY " +
-                COLUMN_DAY + "," + COLUMN_HOUR + "," + COLUMN_MINUTE + ";";
+                COLUMN_SUBJECTNAME + ";";
 
         //Log.d("Akash","In todoCursor()");
         /*
@@ -107,10 +107,9 @@ public class ScheduleDBHandler extends SQLiteOpenHelper{
         String query="SELECT rowid AS _id,* FROM " + TABLE_SCHEDULE +
                 " WHERE " + COLUMN_DAY + "=\"" + day + "\";";
 
-        Cursor cursor=db.rawQuery(query,null);
         //db.close();
 
-        return cursor;
+        return db.rawQuery(query,null);
     }
 
     //Method to remove all the entries in table, the table schema will not be affected

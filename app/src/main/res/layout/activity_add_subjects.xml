@@ -7,21 +7,36 @@
     android:fitsSystemWindows="true"
     tools:context="akashagarwal45.bunkeasy.AddSubjects">
 
-    <ImageButton
-        android:layout_width="wrap_content"
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/addSubjectButton"
-        android:src="@android:drawable/ic_input_add"
-        android:onClick="addSubjectButtonClicked"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:elevation="20dp" />
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/view2"
+        style="@style/AppTheme">
 
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorPrimary"
+            app:popupTheme="@style/AppTheme" />
+
+    </android.support.design.widget.AppBarLayout>
     <ListView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/subjectListView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/view2" />
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/addSubjectButton"
+        android:background="@drawable/add_green_button"
+        android:onClick="addSubjectButtonClicked"
+        android:elevation="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

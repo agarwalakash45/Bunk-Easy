@@ -23,16 +23,24 @@ public class CustomAdapterAttendance extends CursorAdapter{
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView subName=(TextView)view.findViewById(R.id.attendanceSubjectNameTextView);
-        TextView timeSchedule=(TextView)view.findViewById(R.id.attendanceTimeTextView);
-
+        TextView hourTextView=(TextView)view.findViewById(R.id.attendanceHourTextView);
+        TextView minTextView=(TextView)view.findViewById(R.id.attendanceMinTextView);
         String name=cursor.getString(cursor.getColumnIndex("subname"));
-        int hour=cursor.getInt(cursor.getColumnIndex("hour"));
-        int minute=cursor.getInt(cursor.getColumnIndex("minute"));
+        String hour=cursor.getString(cursor.getColumnIndex("hour"));
+        String minute=cursor.getString(cursor.getColumnIndex("minute"));
 
         subName.setText(name);
-        if(minute>=0&&minute<=9)
-            timeSchedule.setText(String.valueOf(hour)+":0"+String.valueOf(minute));
+
+        String temp1="0"+hour;
+        String temp2="0" + minute;
+
+        if(hour.length()==1)
+            hourTextView.setText(temp1);
         else
-            timeSchedule.setText(String.valueOf(hour)+":"+String.valueOf(minute));
+            hourTextView.setText(hour);
+        if(minute.length()==1)
+            minTextView.setText(temp2);
+        else
+            minTextView.setText(minute);
     }
 }

@@ -30,9 +30,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.zip.Inflater;
 
+import javax.security.auth.Subject;
+
 public class SubjectDetails extends FragmentActivity {
 
     AttendanceDBHandler db;
+    SubjectDBHandler sub_db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,7 @@ public class SubjectDetails extends FragmentActivity {
         setContentView(R.layout.activity_subject_details);
 
         db = new AttendanceDBHandler(this, null, null, 1);
+        sub_db = new SubjectDBHandler(this,null,null,1);
 
         //Creating caldroid Fragment to display calendar
         CaldroidFragment calView = new CaldroidFragment();
@@ -73,18 +77,50 @@ public class SubjectDetails extends FragmentActivity {
                 e.printStackTrace();
             }
 
-            int response=c.getInt(c.getColumnIndex("response"));
+            int response=db.forMultipleClasses(subName,stringDate);
 
-            if(response==0)     //Absent is marked, color shhould be set to red
+            if(response==0)     //All Absents are marked, color should be set to red
                 calView.setBackgroundResourceForDate(R.color.caldroid_light_red,date);
-            else if(response==1)            //Present is marked, color should be set to green
+            else if(response==1)            //Some Present and some absent are marked, color should be set to orange
+                calView.setBackgroundResourceForDate(R.color.colorAccent,date);
+            else if(response==2)                           //All present
                 calView.setBackgroundResourceForDate(R.color.caldroid_holo_blue_light,date);
-            else                            //Cancelled/holiday
+            else
                 calView.setBackgroundResourceForDate(R.color.caldroid_white,date);
             c.moveToNext();
         }
 
+        //Displaying current status of attendance in the subject
+        TextView status=(TextView)findViewById(R.id.attendanceStatusDescription);
 
+        //Getting subject information
+        Cursor cursor=sub_db.subjectDetailsByName(subName);
+
+        cursor.moveToFirst();
+
+        String message;         //To display attendance status for the subject
+
+        int total=cursor.getInt(cursor.getColumnIndex("total")),absent=cursor.getInt(cursor.getColumnIndex("missed"));
+
+        float percent,need;       //need to store classes needed to attend to cover shortage of attendance
+        if(total!=0){
+            percent=(float)((total-absent)*100)/total;
+
+            //To display message
+            if(percent<Subjects.shortPercent) {      //If attendance is less than 75%, then display shortage message
+
+                need=(float)(Subjects.shortPercent*total-100*(total-absent))/(100- Subjects.shortPercent);
+
+                message="Your attendance is short\n\nAttend next " + (int)need + " classes";
+                status.setText(message);
+                status.setTextColor(getResources().getColor(android.R.color.holo_red_light));
+            }
+            else{               //If attendance is good
+                message="Your attendance is above "+Subjects.shortPercent+"%";
+                status.setText(message);
+                status.setTextColor(getResources().getColor(android.R.color.holo_green_dark));
+            }
+        }
     }
 
 }
