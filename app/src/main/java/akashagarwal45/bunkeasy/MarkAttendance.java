@@ -111,7 +111,6 @@ public class MarkAttendance extends FragmentActivity {
 
                 Log.d("Akash",clickedDate);
 
-
             }
         };
 
@@ -139,11 +138,15 @@ public class MarkAttendance extends FragmentActivity {
                         final String hour=((TextView) view.findViewById(R.id.attendanceHourTextView)).getText().toString();
                         final String minute= ((TextView)view.findViewById(R.id.attendanceMinTextView)).getText().toString();
 
+                        Log.d("Akash",subjectname+" "+hour+" "+minute);
+
                         //Getting default option as attendance marked
                         int def=2;
 
                         if(att_db.getResponse(subjectname,clickedDate,hour,minute)!=-1)
                                 def=att_db.getResponse(subjectname, clickedDate,hour,minute);
+
+                        Log.d("Akash",""+def);
 
                         //To create alert dialog with radio buttons to mark attendance
                         final int finalDef = def;

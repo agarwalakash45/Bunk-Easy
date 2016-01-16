@@ -4,7 +4,8 @@
         android:title="Profile">
         <EditTextPreference
             android:title="Name"
-            android:dialogTitle="Enter your name"/>
+            android:dialogTitle="Enter your name"
+            android:key="user_name"/>
 
     </PreferenceCategory>
     <PreferenceCategory

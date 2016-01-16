@@ -7,38 +7,31 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
 
 public class AlarmReceiver extends BroadcastReceiver{
     private int NOTIF_ID=31273;
-    AttendanceDBHandler db;
+    ScheduleDBHandler db;
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        db=new AttendanceDBHandler(context,null,null,1);
+        Log.d("Akash","In alarm receiver");
+
+        db=new ScheduleDBHandler(context,null,null,1);
 
         Calendar cal=Calendar.getInstance();
 
-        int year=cal.get(Calendar.YEAR);
+        String [] week={"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"};
 
-        String month,day;
+        int day=cal.get(Calendar.DAY_OF_WEEK);
 
-        if(cal.get(Calendar.MONTH)>=9)
-            month=String.valueOf(cal.get(Calendar.MONTH)+1);
-        else
-            month="0"+String.valueOf(cal.get(Calendar.MONTH)+1);
+        Cursor cursor=db.subjectsListGivenDayCursor(week[day-1]);      //Returns the classes for current day
 
-        if(cal.get(Calendar.DAY_OF_MONTH)>9)
-            day=String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
-        else
-            day="0"+String.valueOf(cal.get(Calendar.DAY_OF_MONTH));         //To get date in the format yyyyMMdd
-
-
-        String date=String.valueOf(year)+month+day;         //Today's date
-
-        Cursor cursor=db.classesOnGivenDate(date);      //Returns the classes for current day
+        Log.d("Akash",""+week[day-1]+"\n"+cursor.getCount());
 
         if(cursor.getCount()>0) {               //If total classes are more than or equal to 1
 
@@ -62,6 +55,7 @@ public class AlarmReceiver extends BroadcastReceiver{
 
 
             notifManager.notify(NOTIF_ID, notifBuilder.build());
+
 
         }
     }

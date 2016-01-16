@@ -111,6 +111,9 @@ public class SubjectDetails extends FragmentActivity {
 
                 need=(float)(Subjects.shortPercent*total-100*(total-absent))/(100- Subjects.shortPercent);
 
+                if((int)need==0)
+                    need+=1;
+
                 message="Your attendance is short\n\nAttend next " + (int)need + " classes";
                 status.setText(message);
                 status.setTextColor(getResources().getColor(android.R.color.holo_red_light));

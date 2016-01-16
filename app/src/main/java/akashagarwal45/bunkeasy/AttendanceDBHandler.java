@@ -5,11 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class AttendanceDBHandler extends SQLiteOpenHelper{
 
-    private static final int DATABASE_VERSION=3;
-    private static final String DATABASE_NAME="attendance.db";
+    private static final int DATABASE_VERSION=4;
+    private static final String DATABASE_NAME="attendance1.db";
     public static final String TABLE_ATTENDANCE="attendance";
     public static final String COLUMN_SUBNAME="subjectname";
     public static final String COLUMN_DATE="date";
@@ -41,15 +42,20 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
 
     //Method to save subject attendance record date wise
     public void saveAttendanceRecord(String subName,String date,int response,String hour,String minute){
+
         SQLiteDatabase db=getWritableDatabase();
+
+        Log.d("Akash","In saveAttendanceRecord()");
 
         if(isAttendanceMarked(subName,date,hour,minute)){       //Entry already in table so just update it
                  String query="UPDATE " + TABLE_ATTENDANCE + " SET " +
                          COLUMN_RESPONSE + "=" + response + " WHERE " +
                          COLUMN_SUBNAME + "=\"" + subName + "\" AND " +
-                         COLUMN_HOUR + "=" + hour + " AND " +
-                         COLUMN_MINUTE + "=" + minute + " AND " +
-                         COLUMN_DATE + "=" + date + ";";
+                         COLUMN_HOUR + "=\"" + hour + "\" AND " +
+                         COLUMN_MINUTE + "=\"" + minute + "\" AND " +
+                         COLUMN_DATE + "=\"" + date + "\";";
+
+                Log.d("Akash","Attendance already marked");
 
             db.execSQL(query);
         }
@@ -57,13 +63,18 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
         else{                                       //Entry not in table so make a new entry
             ContentValues values=new ContentValues();
 
+            Log.d("Akash",subName+" "+date+" "+response+" "+hour+" "+minute);
+
             values.put(COLUMN_SUBNAME,subName);
             values.put(COLUMN_DATE,date);
             values.put(COLUMN_RESPONSE,response);
             values.put(COLUMN_HOUR,hour);
             values.put(COLUMN_MINUTE,minute);
-            db.insert(TABLE_ATTENDANCE, null, values);
+            long val=db.insert(TABLE_ATTENDANCE, null, values);
 
+            Log.d("Akash",""+val);
+
+            Log.d("Akash","Entry created");
         }
 
         db.close();
@@ -73,15 +84,19 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
     public boolean isAttendanceMarked(String subName,String date,String hour,String minute){
         SQLiteDatabase db=getWritableDatabase();
 
+        Log.d("Akash","In isAttendanceMarked(): "+subName+" "+date+" "+" "+hour+" "+minute);
+
         String query="SELECT * FROM " + TABLE_ATTENDANCE + " WHERE " +
                 COLUMN_SUBNAME + "=\"" + subName + "\" AND " +
-                COLUMN_HOUR + "=" + hour + " AND " +
-                COLUMN_MINUTE + "=" + minute + " AND " +
-                COLUMN_DATE + "=" + date + ";";
+                COLUMN_HOUR + "=\"" + hour + "\" AND " +
+                COLUMN_MINUTE + "=\"" + minute + "\" AND " +
+                COLUMN_DATE + "=\"" + date + "\";";
 
         Cursor c=db.rawQuery(query, null);
 
 //        db.close();
+
+        Log.d("Akash","From isAttendanceMarked(): "+c.getCount());
 
         if(c.getCount()<=0)
                 return false;
@@ -93,15 +108,21 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
     public int getResponse(String subName,String date,String hour,String minute){
         SQLiteDatabase db=getReadableDatabase();
 
+        Log.d("Akash","In getResponse(): "+subName+" "+date+" "+" "+hour+" "+minute);
+
         int response;
 
         String query="SELECT * FROM " + TABLE_ATTENDANCE + " WHERE " +
-                COLUMN_DATE + "=" + date + " AND " +
-                COLUMN_HOUR + "=" + hour + " AND " +
-                COLUMN_MINUTE + "=" + minute + " AND " +
+                COLUMN_DATE + "=\"" + date + "\" AND " +
+                COLUMN_HOUR + "=\"" + hour + "\" AND " +
+                COLUMN_MINUTE + "=\"" + minute + "\" AND " +
                 COLUMN_SUBNAME + "=\"" + subName + "\";";
 
         Cursor c = db.rawQuery(query, null);
+
+        //c.moveToFirst();
+
+        Log.d("Akash",""+"From getResponse(): "+c.getCount());
 
         if(c.getCount()<=0)
             response=-1;
@@ -139,17 +160,6 @@ public class AttendanceDBHandler extends SQLiteOpenHelper{
 
         db.close();
     }
-
-    //Method that returns cursor to query that returns all classes on a particular date
-    public Cursor classesOnGivenDate(String date){
-        SQLiteDatabase db=getReadableDatabase();
-
-        String query="SELECT * FROM " + TABLE_ATTENDANCE + " WHERE " +
-                COLUMN_DATE + "=" + date +";";
-
-        return db.rawQuery(query,null);
-    }
-
     //To return cursor to provide dates to show attendance when a subject is opened
     public Cursor showAttendanceonDate(String subName){
         SQLiteDatabase db=getReadableDatabase();

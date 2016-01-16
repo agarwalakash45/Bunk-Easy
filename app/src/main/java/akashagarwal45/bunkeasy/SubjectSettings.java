@@ -12,6 +12,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -47,8 +48,21 @@ public class SubjectSettings extends PreferenceActivity implements SharedPrefere
 
         alarmManager=(AlarmManager)getSystemService(ALARM_SERVICE);
 
+        if(key.equals("user_name")){
+            String name=sharedPreferences.getString("usre_name","Your Name");
+            Log.d("Akash",name);
+        }
+
         if(key.equals("shortage_percent")){         //Setting shortage percentage
-            Subjects.shortPercent= Integer.parseInt(sharedPreferences.getString("shortage_percent","75"));
+
+            int percent=Integer.parseInt(sharedPreferences.getString("shortage_percent","75"));
+
+            if(percent>0&&percent<100)
+                Subjects.shortPercent= Integer.parseInt(sharedPreferences.getString("shortage_percent","75"));
+            else
+                Toast.makeText(this,"Enter a value between 0 and 100",Toast.LENGTH_SHORT).show();
+
+
             Log.d("Akash",""+Subjects.shortPercent);
         }
 
@@ -120,7 +134,7 @@ public class SubjectSettings extends PreferenceActivity implements SharedPrefere
 
                 Log.d("Akash",""+cal.getTime());
 
-                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
+                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(),AlarmManager.INTERVAL_DAY,pendingIntent);
 
 
             }
